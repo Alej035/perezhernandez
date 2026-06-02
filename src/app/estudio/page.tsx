@@ -92,54 +92,25 @@ export default function EstudioPage() {
         <div className="relative z-10 w-full max-w-6xl mx-auto px-5 py-20">
           <div className="flex flex-col lg:flex-row items-center gap-16 lg:gap-20">
 
-            {/* ── FOTOS SOCIOS ── */}
-            <div className="flex-shrink-0 flex flex-col items-center gap-3 w-full lg:w-auto">
-              <div className="flex items-end gap-4">
-                {/* Pérez — más alto */}
-                <div className="flex flex-col items-center gap-3">
-                  <div
-                    className="relative overflow-hidden rounded-2xl w-[155px] h-[210px] lg:w-[210px] lg:h-[290px]"
-                    style={{ boxShadow: "0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(201,168,39,0.2)" }}
-                  >
-                    <img
-                      src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=400&auto=format&fit=crop"
-                      alt="Dr. Pérez"
-                      className="w-full h-full object-cover object-top"
-                    />
-                    {/* Gradient overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628]/70 via-transparent to-transparent" />
-                    {/* Gold top accent */}
-                    <div className="absolute top-0 left-0 right-0 h-0.5 bg-[#c9a227]" />
-                  </div>
-                  <div className="text-center">
-                    <p className="text-white font-bold text-sm leading-none">Pérez</p>
-                    <p className="text-[#c9a227] text-[10px] tracking-widest uppercase mt-1">Socio fundador</p>
-                  </div>
-                </div>
-
-                {/* Hernández — levemente más bajo */}
-                <div className="flex flex-col items-center gap-3 mt-6">
-                  <div
-                    className="relative overflow-hidden rounded-2xl w-[155px] h-[210px] lg:w-[210px] lg:h-[290px]"
-                    style={{ boxShadow: "0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(201,168,39,0.2)" }}
-                  >
-                    <img
-                      src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=400&auto=format&fit=crop"
-                      alt="Dr. Hernández"
-                      className="w-full h-full object-cover object-top"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628]/70 via-transparent to-transparent" />
-                    <div className="absolute top-0 left-0 right-0 h-0.5 bg-[#c9a227]" />
-                  </div>
-                  <div className="text-center">
-                    <p className="text-white font-bold text-sm leading-none">Hernández</p>
-                    <p className="text-[#c9a227] text-[10px] tracking-widest uppercase mt-1">Socio fundador</p>
-                  </div>
+            {/* ── FOTO SOCIO ── */}
+            <div className="flex-shrink-0 flex flex-col items-center gap-4 w-full lg:w-auto">
+              <div
+                className="relative overflow-hidden rounded-2xl w-[200px] h-[270px] lg:w-[260px] lg:h-[350px]"
+                style={{ boxShadow: "0 24px 70px rgba(0,0,0,0.55), 0 0 0 1px rgba(201,168,39,0.25)" }}
+              >
+                <img
+                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=600&auto=format&fit=crop"
+                  alt="S. Pérez Hernández"
+                  className="w-full h-full object-cover object-top"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628]/75 via-transparent to-transparent" />
+                <div className="absolute top-0 left-0 right-0 h-0.5 bg-[#c9a227]" />
+                {/* Nombre sobre la foto */}
+                <div className="absolute bottom-0 left-0 right-0 p-4">
+                  <p className="text-white font-bold text-base leading-none">S. Pérez Hernández</p>
+                  <p className="text-[#c9a227] text-[10px] tracking-widest uppercase mt-1.5">Abogado · Fundador</p>
                 </div>
               </div>
-
-              {/* Firma / tagline debajo de ambas fotos */}
-              <p className="text-white/30 text-xs tracking-widest uppercase mt-1">Pérez Hernández · Estudio Jurídico</p>
             </div>
 
             {/* ── TEXTO PRINCIPAL ── */}
