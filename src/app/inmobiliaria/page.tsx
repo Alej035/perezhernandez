@@ -228,9 +228,14 @@ export default function InmobiliariaPage() {
         </div>
 
         <div className="relative z-10 w-full max-w-4xl mx-auto px-4 sm:px-6 text-center py-20">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/20 text-white/90 text-xs font-medium mb-6 backdrop-blur-sm">
-            <span className="w-2 h-2 rounded-full bg-[#c9a227] animate-pulse" />
-            Propiedades disponibles en Rosario y zona
+          <div className="flex flex-wrap items-center justify-center gap-3 mb-6">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/20 text-white/90 text-xs font-medium backdrop-blur-sm">
+              <span className="w-2 h-2 rounded-full bg-[#c9a227] animate-pulse" />
+              Propiedades en Rosario, Santa Fe y Córdoba
+            </div>
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#c9a227]/10 border border-[#c9a227]/30 text-[#c9a227] text-xs font-semibold backdrop-blur-sm">
+              Asociados CCIN
+            </div>
           </div>
 
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white leading-tight mb-4">
@@ -295,7 +300,7 @@ export default function InmobiliariaPage() {
             {[
               { label: "Departamentos", Icon: Building2 },
               { label: "Casas",         Icon: Home },
-              { label: "Oficinas",      Icon: Landmark },
+              { label: "PHs",           Icon: Landmark },
               { label: "Terrenos",      Icon: TreePine },
               { label: "Locales",       Icon: ShoppingBag },
             ].map(({ label, Icon }) => (
@@ -405,10 +410,14 @@ export default function InmobiliariaPage() {
                   </div>
                 </div>
               ))}
-              <div className="flex gap-3 mt-6">
+              <div className="flex gap-3 mt-6 flex-wrap">
                 <a href={WA} target="_blank" rel="noopener noreferrer"
                   className="flex items-center gap-2 bg-[#c9a227] hover:bg-[#b8911f] text-[#0a1628] font-bold px-5 py-3 rounded-xl text-sm transition-colors">
                   <MessageCircle className="w-4 h-4" /> WhatsApp
+                </a>
+                <a href="https://instagram.com/perezhernandezinmobiliaria" target="_blank" rel="noopener noreferrer"
+                  className="flex items-center gap-2 border border-white/20 hover:border-white/40 text-white/60 hover:text-white px-5 py-3 rounded-xl text-sm transition-colors">
+                  Instagram
                 </a>
               </div>
             </div>
