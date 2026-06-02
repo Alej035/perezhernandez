@@ -177,6 +177,10 @@ function Navbar() {
         </div>
 
         <div className="hidden md:flex items-center gap-3">
+          <Link href="/estudio"
+            className="flex items-center gap-1.5 text-white/50 hover:text-white text-xs font-medium border border-white/15 hover:border-white/30 px-3 py-1.5 rounded-lg transition-colors">
+            Estudio Jurídico →
+          </Link>
           <a href={TEL} className="flex items-center gap-1.5 text-white/70 hover:text-white text-sm transition-colors">
             <Phone className="w-3.5 h-3.5" /> (341) 240-6596
           </a>
