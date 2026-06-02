@@ -8,6 +8,7 @@ import {
   MapPin, Mail, Clock, Home,
 } from "lucide-react";
 import { ImageAccordion } from "@/components/ImageAccordion";
+import { WhatsAppFAB } from "@/components/WhatsAppFAB";
 
 const WA = "https://wa.me/5493417980000?text=Hola%2C%20quiero%20una%20consulta%20sin%20cargo.";
 const TEL = "tel:+543412406596";
@@ -17,7 +18,7 @@ const services = [
     id: 1,
     title: "Derecho Laboral",
     subItems: ["Despidos con o sin causa", "Indemnizaciones", "Trabajo en negro", "Suspensiones y licencias"],
-    imageUrl: "https://images.unsplash.com/photo-1521791136064-7986c2920216?q=80&w=1974&auto=format&fit=crop",
+    imageUrl: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=1974&auto=format&fit=crop",
   },
   {
     id: 2,
@@ -192,7 +193,7 @@ export default function EstudioPage() {
       <section className="relative min-h-screen flex items-center overflow-hidden pt-16">
         <div className="absolute inset-0 z-0">
           <img
-            src="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=2070&auto=format&fit=crop"
+            src="https://images.unsplash.com/photo-1521791136064-7986c2920216?q=80&w=2070&auto=format&fit=crop"
             alt=""
             className="w-full h-full object-cover object-center opacity-20"
           />
@@ -486,10 +487,7 @@ export default function EstudioPage() {
         </div>
       </footer>
 
-      <a href={WA} target="_blank" rel="noopener noreferrer"
-        className="fixed bottom-5 right-5 z-50 flex items-center gap-2 bg-[#25d366] hover:bg-[#1ebe5d] text-white text-sm font-semibold px-5 py-3 rounded-full shadow-xl transition-colors md:hidden">
-        <MessageCircle className="w-4 h-4" /> WhatsApp
-      </a>
+      <WhatsAppFAB />
     </div>
   );
 }

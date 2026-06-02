@@ -1,6 +1,7 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
 import { useState, useEffect } from "react";
+import { WhatsAppFAB } from "@/components/WhatsAppFAB";
 import Link from "next/link";
 import {
   MessageCircle, Phone, Search, Building2, Home, MapPin, Mail,
@@ -448,10 +449,7 @@ export default function InmobiliariaPage() {
         </div>
       </footer>
 
-      <a href={WA} target="_blank" rel="noopener noreferrer"
-        className="fixed bottom-5 right-5 z-50 flex items-center gap-2 bg-[#25d366] hover:bg-[#1ebe5d] text-white text-sm font-semibold px-5 py-3 rounded-full shadow-xl transition-colors md:hidden">
-        <MessageCircle className="w-4 h-4" /> WhatsApp
-      </a>
+      <WhatsAppFAB />
     </div>
   );
 }
