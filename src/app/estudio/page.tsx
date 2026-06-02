@@ -98,12 +98,8 @@ export default function EstudioPage() {
                 {/* Pérez — más alto */}
                 <div className="flex flex-col items-center gap-3">
                   <div
-                    className="relative overflow-hidden rounded-2xl"
-                    style={{
-                      width: 155,
-                      height: 210,
-                      boxShadow: "0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(201,168,39,0.2)",
-                    }}
+                    className="relative overflow-hidden rounded-2xl w-[155px] h-[210px] lg:w-[210px] lg:h-[290px]"
+                    style={{ boxShadow: "0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(201,168,39,0.2)" }}
                   >
                     <img
                       src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=400&auto=format&fit=crop"
@@ -124,12 +120,8 @@ export default function EstudioPage() {
                 {/* Hernández — levemente más bajo */}
                 <div className="flex flex-col items-center gap-3 mt-6">
                   <div
-                    className="relative overflow-hidden rounded-2xl"
-                    style={{
-                      width: 155,
-                      height: 210,
-                      boxShadow: "0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(201,168,39,0.2)",
-                    }}
+                    className="relative overflow-hidden rounded-2xl w-[155px] h-[210px] lg:w-[210px] lg:h-[290px]"
+                    style={{ boxShadow: "0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(201,168,39,0.2)" }}
                   >
                     <img
                       src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=400&auto=format&fit=crop"
