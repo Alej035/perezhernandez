@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { MessageCircle, Phone, Menu, X, ArrowRight, ChevronDown, MapPin, Mail, Clock, Check } from "lucide-react";
 import { WhatsAppFAB } from "@/components/WhatsAppFAB";
@@ -55,18 +55,7 @@ function Navbar() {
 }
 
 export default function EstudioPage() {
-  const heroImgRef = useRef<HTMLImageElement>(null);
   const [hoveredService, setHoveredService] = useState<"laboral" | "inmobiliario" | null>(null);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (heroImgRef.current) {
-        heroImgRef.current.style.transform = `translateY(${window.scrollY * 0.2}px)`;
-      }
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   return (
     <>
@@ -75,16 +64,8 @@ export default function EstudioPage() {
 
       {/* ── 1. HERO ─────────────────────────────────────────────────────────── */}
       <section className="relative min-h-screen flex items-center overflow-hidden pt-16">
-        {/* Background */}
-        <div className="absolute inset-0 overflow-hidden">
-          <img
-            ref={heroImgRef}
-            src="https://images.unsplash.com/photo-1521791136064-7986c2920216?q=80&w=2070&auto=format&fit=crop"
-            alt=""
-            className="absolute inset-0 w-full h-[120%] object-cover opacity-10 will-change-transform"
-          />
-          <div className="absolute inset-0 bg-[#0a1628]/85" />
-        </div>
+        {/* Background sólido */}
+        <div className="absolute inset-0 bg-[#0a1628]" />
 
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#c9a227]/30 to-transparent" />
         <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#c9a227]/30 to-transparent" />
@@ -99,7 +80,7 @@ export default function EstudioPage() {
                 style={{ boxShadow: "0 24px 70px rgba(0,0,0,0.55), 0 0 0 1px rgba(201,168,39,0.25)" }}
               >
                 <img
-                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=600&auto=format&fit=crop"
+                  src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?q=80&w=600&auto=format&fit=crop"
                   alt="S. Pérez Hernández"
                   className="w-full h-full object-cover object-top"
                   style={{ filter: "blur(6px)", transform: "scale(1.05)" }}
