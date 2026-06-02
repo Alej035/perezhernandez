@@ -5,6 +5,7 @@ import Link from "next/link";
 import {
   MessageCircle, Phone, Search, Building2, Home, MapPin, Mail,
   Clock, Star, ArrowRight, Shield, CheckCircle, Menu, X,
+  Landmark, TreePine, ShoppingBag,
 } from "lucide-react";
 
 const WA = "https://wa.me/5493417980000?text=Hola%2C%20quiero%20consultar%20sobre%20una%20propiedad.";
@@ -211,7 +212,7 @@ export default function InmobiliariaPage() {
   const [filter, setFilter] = useState("Todos");
 
   return (
-    <div className="bg-[#0a1628] font-sans">
+    <div className="page-enter bg-[#0a1628] font-sans">
       <Navbar />
 
       {/* ── HERO ── */}
@@ -292,15 +293,17 @@ export default function InmobiliariaPage() {
           <h2 className="text-2xl font-bold text-white mb-8 text-center">Buscá por tipo</h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
             {[
-              { label: "Departamentos", emoji: "🏢" },
-              { label: "Casas", emoji: "🏡" },
-              { label: "Oficinas", emoji: "🏛️" },
-              { label: "Terrenos", emoji: "🌿" },
-              { label: "Locales", emoji: "🏪" },
-            ].map(({ label, emoji }) => (
+              { label: "Departamentos", Icon: Building2 },
+              { label: "Casas",         Icon: Home },
+              { label: "Oficinas",      Icon: Landmark },
+              { label: "Terrenos",      Icon: TreePine },
+              { label: "Locales",       Icon: ShoppingBag },
+            ].map(({ label, Icon }) => (
               <button key={label}
                 className="flex flex-col items-center justify-center gap-3 p-6 bg-[#0d1e35] border border-white/10 hover:border-[#c9a227]/40 rounded-2xl transition-all group hover:-translate-y-1">
-                <span className="text-3xl">{emoji}</span>
+                <div className="w-10 h-10 rounded-xl bg-[#c9a227]/10 flex items-center justify-center group-hover:bg-[#c9a227]/20 transition-colors">
+                  <Icon className="w-5 h-5 text-[#c9a227]" />
+                </div>
                 <span className="text-sm font-semibold text-white/70 group-hover:text-[#c9a227] transition-colors">{label}</span>
               </button>
             ))}

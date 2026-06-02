@@ -185,7 +185,7 @@ function FAQ() {
 
 export default function EstudioPage() {
   return (
-    <div className="bg-[#0a1628] font-sans">
+    <div className="page-enter bg-[#0a1628] font-sans">
       <Navbar />
 
       {/* ── HERO ── */}
