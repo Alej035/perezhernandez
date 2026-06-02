@@ -121,6 +121,11 @@ export default function Home() {
         );
       })}
 
+      {/* Logo centrado arriba */}
+      <div className="absolute top-5 left-1/2 -translate-x-1/2 z-30 pointer-events-none">
+        <img src="/logo.png" alt="logo" className="w-11 h-11 rounded-xl object-cover shadow-lg" />
+      </div>
+
       {/* Mobile: divisor horizontal */}
       <div
         className="sm:hidden w-full flex-shrink-0"

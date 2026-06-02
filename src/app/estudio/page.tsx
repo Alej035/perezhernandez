@@ -106,10 +106,8 @@ function Navbar() {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0a1628]/95 backdrop-blur border-b border-white/10">
       <div className="max-w-6xl mx-auto px-5 h-16 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="w-8 h-8 rounded-lg bg-[#c9a227] flex items-center justify-center">
-            <Scale className="w-4 h-4 text-[#0a1628]" />
-          </div>
+        <Link href="/" className="flex items-center gap-3 group">
+          <img src="/logo.png" alt="Pérez Hernández" className="w-9 h-9 rounded-lg object-cover" />
           <div>
             <p className="text-white font-bold text-sm leading-none">Pérez Hernández</p>
             <p className="text-[#c9a227] text-[10px] tracking-widest uppercase">Estudio Jurídico</p>
