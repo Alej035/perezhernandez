@@ -121,9 +121,13 @@ export default function Home() {
         );
       })}
 
-      {/* Logo centrado arriba */}
-      <div className="absolute top-5 left-1/2 -translate-x-1/2 z-30 pointer-events-none">
-        <img src="/logo.png" alt="logo" className="w-11 h-11 rounded-xl object-cover shadow-lg" />
+      {/* Logo + nombre centrado arriba */}
+      <div className="absolute top-5 left-1/2 -translate-x-1/2 z-30 pointer-events-none flex items-center gap-3">
+        <img src="/logo.png" alt="logo" className="w-10 h-10 rounded-xl object-cover shadow-lg flex-shrink-0" />
+        <div>
+          <p className="text-white font-bold text-sm leading-none tracking-wide">Pérez Hernández</p>
+          <p className="text-[#c9a227] text-[10px] tracking-[0.25em] uppercase mt-0.5">Inmobiliaria & Estudio Jurídico</p>
+        </div>
       </div>
 
       {/* Mobile: divisor horizontal */}
