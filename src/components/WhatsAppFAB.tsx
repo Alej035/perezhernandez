@@ -28,7 +28,6 @@ export function WhatsAppFAB() {
           />
           <span>Estamos disponibles</span>
         </span>
-        <p className="text-[#0a1628]/50 font-normal mt-0.5 pl-4">+54 9 341 798-0000</p>
         {/* Flecha derecha */}
         <span
           className="absolute top-1/2 -translate-y-1/2 right-[-6px] border-4 border-transparent"

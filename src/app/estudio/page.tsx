@@ -107,7 +107,7 @@ function Navbar() {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0a1628]/95 backdrop-blur border-b border-white/10">
       <div className="max-w-6xl mx-auto px-5 h-16 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-3 group">
-          <img src="/logo.png" alt="Pérez Hernández" className="w-9 h-9 rounded-lg object-cover" />
+          <img src="/logo.png" alt="Pérez Hernández" className="w-9 h-9 rounded-lg object-cover" fetchPriority="high" />
           <div>
             <p className="text-white font-bold text-sm leading-none">Pérez Hernández</p>
             <p className="text-[#c9a227] text-[10px] tracking-widest uppercase">Estudio Jurídico</p>
@@ -184,6 +184,7 @@ function FAQ() {
 
 export default function EstudioPage() {
   return (
+    <>
     <div className="slide-from-right bg-[#0a1628] font-sans">
       <Navbar />
 
@@ -485,7 +486,8 @@ export default function EstudioPage() {
         </div>
       </footer>
 
-      <WhatsAppFAB />
     </div>
+    <WhatsAppFAB />
+    </>
   );
 }
