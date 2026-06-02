@@ -1,361 +1,337 @@
+"use client";
+/* eslint-disable @next/next/no-img-element */
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
-import { getProperties, getFrontPhoto, formatPrice, type TokkoProperty } from "@/lib/tokko";
+import {
+  MessageCircle, Phone, Search, Building2, Home, MapPin, Mail,
+  Clock, Star, ArrowRight, Shield, CheckCircle, Menu, X,
+} from "lucide-react";
 
-const testimonios = [
+const WA = "https://wa.me/5493417980000?text=Hola%2C%20quiero%20consultar%20sobre%20una%20propiedad.";
+const TEL = "tel:+543412406596";
+const TOKKO_KEY = process.env.NEXT_PUBLIC_TOKKO_API_KEY ?? "";
+
+const testimonials = [
   {
-    texto:
-      "Encontramos el departamento que buscábamos en menos de dos semanas. El proceso fue transparente y sin sorpresas.",
-    nombre: "Valentina G.",
-    cargo: "Compradora, Rosario",
+    name: "Valentina G.",
+    text: "Encontramos el departamento que buscábamos en menos de dos semanas. El proceso fue transparente y sin sorpresas de principio a fin.",
+    rating: 5,
+    case: "Compra de departamento",
   },
   {
-    texto:
-      "Vendimos nuestra propiedad por encima del valor que esperábamos. El equipo de Pérez Hernández maneja el mercado como nadie.",
-    nombre: "Roberto A.",
-    cargo: "Vendedor, Funes",
+    name: "Roberto A.",
+    text: "Vendimos nuestra propiedad por encima del valor que esperábamos. El equipo maneja el mercado de Rosario como nadie.",
+    rating: 5,
+    case: "Venta de casa",
   },
   {
-    texto:
-      "Buscábamos una oficina comercial y nos consiguieron exactamente lo que necesitábamos. Atención impecable.",
-    nombre: "Claudia M.",
-    cargo: "Empresaria, Rosario",
+    name: "Claudia M.",
+    text: "Buscábamos una oficina comercial y nos consiguieron exactamente lo que necesitábamos. Atención impecable en todo momento.",
+    rating: 5,
+    case: "Alquiler comercial",
   },
 ];
 
-async function PropertyGrid() {
-  if (!process.env.TOKKO_API_KEY) {
-    return (
-      <div
-        className="col-span-full flex flex-col items-center justify-center py-20 gap-4"
-        style={{ border: "1px solid rgba(201,168,76,0.2)", background: "rgba(201,168,76,0.03)" }}
-      >
-        <div className="w-10 h-px" style={{ background: "var(--gold)" }} />
-        <p className="text-sm font-medium" style={{ color: "var(--gold)" }}>
-          Integración Tokko pendiente
-        </p>
-        <p className="text-xs text-center max-w-xs" style={{ color: "rgba(255,255,255,0.3)" }}>
-          Configurá la variable{" "}
-          <code className="font-mono" style={{ color: "rgba(255,255,255,0.5)" }}>
-            TOKKO_API_KEY
-          </code>{" "}
-          en Vercel para mostrar las propiedades automáticamente.
-        </p>
-      </div>
-    );
-  }
+interface TokkoProperty {
+  id: number;
+  title: string;
+  address: string;
+  location: { name: string };
+  operations: Array<{ operation_type: string; prices: Array<{ currency: string; price: number }> }>;
+  photos: Array<{ image: string; is_front_photo: boolean }>;
+  surface_total: number;
+  surface_covered: number;
+  rooms: number;
+  type: { name: string };
+  web_url: string;
+}
 
-  let properties: TokkoProperty[] = [];
-  try {
-    const data = await getProperties({ limit: 9 });
-    properties = data.objects ?? [];
-  } catch {
-    return (
-      <div className="col-span-full text-center py-12 text-sm" style={{ color: "rgba(255,255,255,0.3)" }}>
-        No se pudieron cargar las propiedades. Intentá más tarde.
+function formatPrice(prop: TokkoProperty) {
+  const op = prop.operations?.[0];
+  if (!op?.prices?.length) return "Consultar";
+  const p = op.prices[0];
+  return `${p.currency} ${p.price.toLocaleString("es-AR")}`;
+}
+
+function getFront(prop: TokkoProperty) {
+  if (!prop.photos?.length) return null;
+  return (prop.photos.find((p) => p.is_front_photo) ?? prop.photos[0]).image;
+}
+
+function PropertyCard({ prop }: { prop: TokkoProperty }) {
+  const photo = getFront(prop);
+  return (
+    <a href={prop.web_url} target="_blank" rel="noopener noreferrer"
+      className="group bg-[#0a1628] border border-white/10 hover:border-[#c9a227]/40 rounded-2xl overflow-hidden transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-[#c9a227]/5 flex flex-col">
+      <div className="relative h-48 overflow-hidden bg-[#0d1e35]">
+        {photo ? (
+          <img src={photo} alt={prop.title}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+        ) : (
+          <div className="flex h-full items-center justify-center text-white/10">
+            <Home className="w-10 h-10" />
+          </div>
+        )}
+        {prop.operations?.[0] && (
+          <span className="absolute top-3 left-3 bg-[#0a1628]/90 text-[#c9a227] text-xs font-semibold px-2.5 py-1 rounded-lg backdrop-blur-sm">
+            {prop.operations[0].operation_type}
+          </span>
+        )}
       </div>
-    );
-  }
+      <div className="p-5 flex flex-col gap-2 flex-1">
+        <p className="text-[#c9a227] text-xs font-semibold uppercase tracking-wide">
+          {prop.type?.name} · {prop.location?.name}
+        </p>
+        <h3 className="text-white font-semibold text-sm leading-snug line-clamp-2">{prop.title}</h3>
+        <p className="text-white/40 text-xs">{prop.address}</p>
+        <div className="flex gap-3 text-xs text-white/40 mt-1">
+          {prop.rooms > 0 && <span>{prop.rooms} amb.</span>}
+          {prop.surface_covered > 0 && <span>{prop.surface_covered} m² cub.</span>}
+          {prop.surface_total > 0 && <span>{prop.surface_total} m² tot.</span>}
+        </div>
+        <div className="flex items-center justify-between mt-auto pt-3 border-t border-white/10">
+          <span className="text-white font-bold text-base">{formatPrice(prop)}</span>
+          <ArrowRight className="w-4 h-4 text-[#c9a227] group-hover:translate-x-1 transition-transform" />
+        </div>
+      </div>
+    </a>
+  );
+}
+
+function PropertyGrid({ filter }: { filter: string }) {
+  const [props, setProps] = useState<TokkoProperty[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    if (!TOKKO_KEY) { setLoading(false); return; }
+    const url = new URL("https://api.tokkoBroker.com/api/v1/property/");
+    url.searchParams.set("key", TOKKO_KEY);
+    url.searchParams.set("lang", "es");
+    url.searchParams.set("format", "json");
+    url.searchParams.set("limit", "12");
+    if (filter !== "Todos") url.searchParams.set("operation_type", filter);
+
+    fetch(url.toString())
+      .then((r) => r.json())
+      .then((d) => { setProps(d.objects ?? []); setLoading(false); })
+      .catch(() => { setError(true); setLoading(false); });
+  }, [filter]);
+
+  if (!TOKKO_KEY) return (
+    <div className="col-span-full flex flex-col items-center justify-center py-20 gap-4 bg-[#0d1e35] border border-[#c9a227]/20 rounded-2xl">
+      <div className="w-11 h-11 rounded-xl bg-[#c9a227]/10 flex items-center justify-center">
+        <Building2 className="w-5 h-5 text-[#c9a227]" />
+      </div>
+      <p className="font-semibold text-white">Integración Tokko pendiente</p>
+      <p className="text-white/40 text-sm text-center max-w-sm">
+        Configurá <code className="text-white/60 font-mono">NEXT_PUBLIC_TOKKO_API_KEY</code> para mostrar las propiedades automáticamente desde Tokko Broker.
+      </p>
+    </div>
+  );
+
+  if (loading) return (
+    <>
+      {Array.from({ length: 6 }).map((_, i) => (
+        <div key={i} className="bg-[#0d1e35] border border-white/10 rounded-2xl h-72 animate-pulse" />
+      ))}
+    </>
+  );
+
+  if (error) return (
+    <div className="col-span-full text-center py-12 text-white/40 text-sm">
+      No se pudieron cargar las propiedades. Intentá más tarde.
+    </div>
+  );
+
+  if (!props.length) return (
+    <div className="col-span-full text-center py-12 text-white/40 text-sm">
+      No hay propiedades disponibles en este momento.
+    </div>
+  );
+
+  return <>{props.map((p) => <PropertyCard key={p.id} prop={p} />)}</>;
+}
+
+function Navbar() {
+  const [open, setOpen] = useState(false);
+  const links = ["Propiedades", "Servicios", "Testimonios", "Contacto"];
 
   return (
-    <>
-      {properties.map((prop) => {
-        const photo = getFrontPhoto(prop);
-        return (
-          <a
-            key={prop.id}
-            href={prop.web_url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group overflow-hidden flex flex-col"
-            style={{ background: "#111827", border: "1px solid rgba(255,255,255,0.06)" }}
-          >
-            <div className="relative h-52 overflow-hidden" style={{ background: "#1a2234" }}>
-              {photo ? (
-                <Image
-                  src={photo}
-                  alt={prop.title}
-                  fill
-                  className="object-cover"
-                  style={{
-                    transition: "transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)",
-                  }}
-                  sizes="(max-width: 768px) 100vw, 33vw"
-                />
-              ) : (
-                <div className="flex h-full items-center justify-center" style={{ color: "rgba(255,255,255,0.1)" }}>
-                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="0.5">
-                    <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
-                  </svg>
-                </div>
-              )}
-              {prop.operations?.[0] && (
-                <span
-                  className="absolute top-4 left-4 text-xs font-medium px-3 py-1 tracking-widest uppercase"
-                  style={{ background: "rgba(13,17,23,0.8)", color: "var(--gold)", backdropFilter: "blur(8px)" }}
-                >
-                  {prop.operations[0].operation_type}
-                </span>
-              )}
-            </div>
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0a1628]/95 backdrop-blur border-b border-white/10">
+      <div className="max-w-6xl mx-auto px-5 h-16 flex items-center justify-between">
+        <Link href="/" className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-lg bg-[#c9a227] flex items-center justify-center">
+            <Building2 className="w-4 h-4 text-[#0a1628]" />
+          </div>
+          <div>
+            <p className="text-white font-bold text-sm leading-none">Pérez Hernández</p>
+            <p className="text-[#c9a227] text-[10px] tracking-widest uppercase">Inmobiliaria</p>
+          </div>
+        </Link>
 
-            <div className="p-6 flex flex-col gap-3 flex-1">
-              <div>
-                <p className="text-xs tracking-[0.2em] uppercase mb-2" style={{ color: "var(--gold-dim)" }}>
-                  {prop.type?.name} · {prop.location?.name}
-                </p>
-                <h3 className="text-sm font-medium leading-snug line-clamp-2" style={{ color: "rgba(255,255,255,0.85)" }}>
-                  {prop.title}
-                </h3>
-              </div>
+        <div className="hidden md:flex items-center gap-7">
+          {links.map((l) => (
+            <a key={l} href={`#${l.toLowerCase()}`} className="text-white/60 hover:text-white text-sm transition-colors">{l}</a>
+          ))}
+        </div>
 
-              <div className="flex items-center gap-4 text-xs" style={{ color: "rgba(255,255,255,0.3)" }}>
-                {prop.rooms > 0 && <span>{prop.rooms} amb.</span>}
-                {prop.surface_covered > 0 && <span>{prop.surface_covered} m² cub.</span>}
-                {prop.surface_total > 0 && <span>{prop.surface_total} m² tot.</span>}
-              </div>
-
-              <div className="flex items-center justify-between mt-auto pt-4" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
-                <span className="text-base font-medium" style={{ color: "rgba(255,255,255,0.9)" }}>
-                  {formatPrice(prop)}
-                </span>
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  style={{ color: "var(--gold)", transform: "translateX(0)", transition: "transform 0.3s ease" }}
-                  className="group-hover:translate-x-1"
-                >
-                  <path d="M5 12h14M12 5l7 7-7 7" />
-                </svg>
-              </div>
-            </div>
+        <div className="hidden md:flex items-center gap-3">
+          <a href={TEL} className="flex items-center gap-1.5 text-white/70 hover:text-white text-sm transition-colors">
+            <Phone className="w-3.5 h-3.5" /> (341) 240-6596
           </a>
-        );
-      })}
-    </>
+          <a href={WA} target="_blank" rel="noopener noreferrer"
+            className="flex items-center gap-2 bg-[#c9a227] hover:bg-[#b8911f] text-[#0a1628] text-sm font-bold px-4 py-2 rounded-lg transition-colors">
+            <MessageCircle className="w-3.5 h-3.5" /> Consultar
+          </a>
+        </div>
+
+        <button className="md:hidden p-2 text-white" onClick={() => setOpen(!open)}>
+          {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+        </button>
+      </div>
+
+      {open && (
+        <div className="md:hidden bg-[#0a1628] border-t border-white/10 px-5 py-4 flex flex-col gap-4">
+          {links.map((l) => (
+            <a key={l} href={`#${l.toLowerCase()}`} onClick={() => setOpen(false)} className="text-white/80 text-sm">{l}</a>
+          ))}
+          <a href={WA} target="_blank" rel="noopener noreferrer"
+            className="flex items-center justify-center gap-2 bg-[#c9a227] text-[#0a1628] text-sm font-bold px-4 py-3 rounded-xl mt-1">
+            <MessageCircle className="w-4 h-4" /> Consultar por WhatsApp
+          </a>
+        </div>
+      )}
+    </nav>
   );
 }
 
 export default function InmobiliariaPage() {
+  const [query, setQuery] = useState("");
+  const [filter, setFilter] = useState("Todos");
+
   return (
-    <div style={{ background: "#0d1117", color: "#fff", fontFamily: "var(--font-inter)" }}>
-
-      {/* ── HEADER ── */}
-      <header
-        className="fixed top-0 left-0 right-0 z-50"
-        style={{
-          background: "rgba(13,17,23,0.8)",
-          backdropFilter: "blur(20px)",
-          borderBottom: "1px solid rgba(255,255,255,0.06)",
-        }}
-      >
-        <div className="max-w-7xl mx-auto px-6 md:px-10 h-16 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-4 group">
-            <svg
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              style={{ color: "var(--gold)" }}
-              className="group-hover:-translate-x-1 transition-transform"
-            >
-              <path d="M19 12H5M12 19l-7-7 7-7" />
-            </svg>
-            <span className="text-sm tracking-[0.2em] uppercase font-medium" style={{ color: "rgba(255,255,255,0.7)" }}>
-              Pérez Hernández
-            </span>
-          </Link>
-
-          <nav className="hidden md:flex items-center gap-8">
-            {[
-              ["Propiedades", "#propiedades"],
-              ["Servicios", "#servicios"],
-              ["Testimonios", "#testimonios"],
-              ["Contacto", "#contacto"],
-            ].map(([label, href]) => (
-              <a
-                key={label}
-                href={href}
-                className="nav-link text-xs tracking-[0.15em] uppercase"
-              >
-                {label}
-              </a>
-            ))}
-          </nav>
-
-          <a
-            href="https://wa.me/5493417980000"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-gold"
-            style={{ padding: "10px 24px" }}
-          >
-            <span>Consultar</span>
-          </a>
-        </div>
-      </header>
+    <div className="bg-[#0a1628] font-sans">
+      <Navbar />
 
       {/* ── HERO ── */}
-      <section className="relative h-screen flex items-end overflow-hidden">
-        <Image
-          src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1920&q=85"
-          alt="Propiedad premium"
-          fill
-          priority
-          className="object-cover"
-          sizes="100vw"
-        />
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "linear-gradient(to top, rgba(13,17,23,1) 0%, rgba(13,17,23,0.55) 50%, rgba(13,17,23,0.15) 100%)",
-          }}
-        />
-
-        <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-10 pb-24 w-full">
-          <p className="text-xs tracking-[0.4em] uppercase mb-6 animate-fade-up" style={{ color: "var(--gold)" }}>
-            Negocios Inmobiliarios
-          </p>
-          <h1
-            className="font-display text-5xl md:text-7xl font-light leading-[1.05] mb-8 animate-fade-up delay-100"
-            style={{ fontFamily: "var(--font-playfair)", maxWidth: 700 }}
-          >
-            Propiedades
-            <br />
-            <em>de primer nivel</em>
-          </h1>
-          <p
-            className="text-base font-light mb-10 animate-fade-up delay-200"
-            style={{ color: "rgba(255,255,255,0.55)", maxWidth: 440 }}
-          >
-            Ventas, alquileres y tasaciones en Rosario y la región. Asesoramiento integral para cada operación.
-          </p>
-          <div className="flex gap-4 flex-wrap animate-fade-up delay-300">
-            <a href="#propiedades" className="btn-gold">
-              <span>Ver propiedades</span>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                <path d="M5 12h14M12 5l7 7-7 7" />
-              </svg>
-            </a>
-            <a href="#contacto" className="btn-gold" style={{ borderColor: "rgba(255,255,255,0.2)", color: "rgba(255,255,255,0.6)" }}>
-              <span>Tasar mi propiedad</span>
-            </a>
-          </div>
+      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden pt-16">
+        <div className="absolute inset-0 z-0">
+          <img
+            src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1800&q=80"
+            alt=""
+            className="w-full h-full object-cover"
+            style={{ opacity: 0.25 }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#0a1628]/70 via-[#0a1628]/60 to-[#0a1628]" />
         </div>
-      </section>
 
-      {/* ── BUSCADOR / FILTROS ── */}
-      <section id="propiedades" style={{ background: "#080b10", paddingTop: 80, paddingBottom: 40 }}>
-        <div className="max-w-7xl mx-auto px-6 md:px-10">
-          <div
-            className="p-6 md:p-8 flex flex-col md:flex-row gap-4 items-center"
-            style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}
-          >
-            <div className="flex-1 w-full flex items-center gap-3" style={{ borderBottom: "1px solid rgba(255,255,255,0.1)", paddingBottom: 12 }}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" style={{ color: "rgba(255,255,255,0.3)", flexShrink: 0 }}>
-                <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
-              </svg>
-              <input
-                type="text"
-                placeholder="Buscar por barrio, tipo o precio..."
-                className="bg-transparent text-sm outline-none flex-1"
-                style={{ color: "rgba(255,255,255,0.7)", caretColor: "var(--gold)" }}
-              />
-            </div>
-            <div className="flex gap-3 flex-wrap">
-              {["Todos", "Venta", "Alquiler"].map((f, i) => (
-                <button
-                  key={f}
-                  className="text-xs tracking-[0.15em] uppercase px-5 py-2 transition-all"
-                  style={{
-                    border: "1px solid",
-                    borderColor: i === 0 ? "var(--gold)" : "rgba(255,255,255,0.12)",
-                    color: i === 0 ? "var(--gold)" : "rgba(255,255,255,0.4)",
-                    background: "transparent",
-                    cursor: "pointer",
-                  }}
-                >
-                  {f}
+        <div className="relative z-10 w-full max-w-4xl mx-auto px-4 sm:px-6 text-center py-20">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/20 text-white/90 text-xs font-medium mb-6 backdrop-blur-sm">
+            <span className="w-2 h-2 rounded-full bg-[#c9a227] animate-pulse" />
+            Propiedades disponibles en Rosario y zona
+          </div>
+
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white leading-tight mb-4">
+            Encontrá la propiedad<br />
+            <span className="text-[#c9a227]">ideal para vos</span>
+          </h1>
+
+          <p className="text-lg text-white/60 mb-10 max-w-xl mx-auto">
+            Casas, departamentos, oficinas y más — en las mejores ubicaciones de Rosario.
+          </p>
+
+          {/* Search bar */}
+          <div className="bg-white rounded-2xl shadow-2xl p-3 flex flex-col sm:flex-row gap-2 max-w-3xl mx-auto">
+            <div className="flex gap-1 overflow-x-auto pb-1 sm:pb-0">
+              {["Todos", "Venta", "Alquiler"].map((t) => (
+                <button key={t} type="button" onClick={() => setFilter(t)}
+                  className={`whitespace-nowrap px-4 py-2 rounded-xl text-xs font-semibold transition-colors flex-shrink-0 ${
+                    filter === t ? "bg-[#0a1628] text-white" : "text-slate-500 hover:bg-slate-100 hover:text-slate-900"
+                  }`}>
+                  {t}
                 </button>
               ))}
             </div>
+            <div className="flex-1 flex items-center gap-2 bg-slate-50 rounded-xl px-3">
+              <Search className="w-4 h-4 text-slate-400 flex-shrink-0" />
+              <input type="text" placeholder="Barrio, ciudad o zona..."
+                value={query} onChange={(e) => setQuery(e.target.value)}
+                className="flex-1 bg-transparent py-2.5 text-sm text-slate-900 placeholder:text-slate-400 outline-none" />
+            </div>
+            <button className="sm:w-auto w-full px-6 py-2.5 bg-[#c9a227] hover:bg-[#b8911f] text-[#0a1628] font-bold rounded-xl text-sm transition-colors">
+              Buscar
+            </button>
+          </div>
+
+          <div className="flex justify-center gap-10 mt-10">
+            {[{ value: "200+", label: "Propiedades" }, { value: "98%", label: "Clientes satisfechos" }, { value: "+20 años", label: "De experiencia" }].map(({ value, label }) => (
+              <div key={label} className="text-center">
+                <p className="text-2xl font-bold text-white">{value}</p>
+                <p className="text-xs text-white/50 mt-0.5">{label}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* ── GRID PROPIEDADES ── */}
-      <section style={{ background: "#080b10", paddingBottom: 120, paddingTop: 40 }}>
-        <div className="max-w-7xl mx-auto px-6 md:px-10">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <PropertyGrid />
+      {/* ── PROPIEDADES ── */}
+      <section id="propiedades" className="py-20 bg-[#0d1e35]">
+        <div className="max-w-6xl mx-auto px-5">
+          <p className="text-[#c9a227] text-xs font-semibold uppercase tracking-widest text-center mb-2">Disponibles ahora</p>
+          <h2 className="text-3xl font-bold text-white text-center mb-12">Propiedades en {filter === "Todos" ? "venta y alquiler" : filter.toLowerCase()}</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            <PropertyGrid filter={filter} />
+          </div>
+        </div>
+      </section>
+
+      {/* ── CATEGORÍAS ── */}
+      <section className="bg-[#0a1628] py-16">
+        <div className="max-w-6xl mx-auto px-5">
+          <h2 className="text-2xl font-bold text-white mb-8 text-center">Buscá por tipo</h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+            {[
+              { label: "Departamentos", emoji: "🏢" },
+              { label: "Casas", emoji: "🏡" },
+              { label: "Oficinas", emoji: "🏛️" },
+              { label: "Terrenos", emoji: "🌿" },
+              { label: "Locales", emoji: "🏪" },
+            ].map(({ label, emoji }) => (
+              <button key={label}
+                className="flex flex-col items-center justify-center gap-3 p-6 bg-[#0d1e35] border border-white/10 hover:border-[#c9a227]/40 rounded-2xl transition-all group hover:-translate-y-1">
+                <span className="text-3xl">{emoji}</span>
+                <span className="text-sm font-semibold text-white/70 group-hover:text-[#c9a227] transition-colors">{label}</span>
+              </button>
+            ))}
           </div>
         </div>
       </section>
 
       {/* ── SERVICIOS ── */}
-      <section id="servicios" className="py-32 px-6 md:px-10" style={{ background: "#0d1117" }}>
-        <div className="max-w-7xl mx-auto">
-          <p className="text-xs tracking-[0.35em] uppercase mb-5 font-medium" style={{ color: "var(--gold)" }}>
-            Servicios
-          </p>
-          <h2
-            className="font-display text-4xl md:text-5xl font-light mb-20"
-            style={{ fontFamily: "var(--font-playfair)" }}
-          >
-            Todo en un solo lugar
-          </h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-px" style={{ background: "rgba(255,255,255,0.06)" }}>
+      <section id="servicios" className="py-20 bg-[#0d1e35]">
+        <div className="max-w-6xl mx-auto px-5">
+          <p className="text-[#c9a227] text-xs font-semibold uppercase tracking-widest text-center mb-2">Servicios</p>
+          <h2 className="text-3xl font-bold text-white text-center mb-12">Todo en un solo lugar</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {[
-              {
-                icon: (
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
-                    <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
-                    <polyline points="9 22 9 12 15 12 15 22" />
-                  </svg>
-                ),
-                titulo: "Compra & Venta",
-                desc: "Acompañamiento integral en cada paso de la operación, desde la búsqueda hasta la escrituración.",
-              },
-              {
-                icon: (
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
-                    <rect x="3" y="3" width="18" height="18" rx="2" />
-                    <path d="M3 9h18M9 21V9" />
-                  </svg>
-                ),
-                titulo: "Alquileres",
-                desc: "Gestión completa de contratos de alquiler con respaldo jurídico en cada operación.",
-              },
-              {
-                icon: (
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
-                    <circle cx="12" cy="12" r="10" />
-                    <path d="M12 8v4l3 3" />
-                  </svg>
-                ),
-                titulo: "Tasaciones",
-                desc: "Valuación precisa y actualizada de tu propiedad basada en datos reales del mercado.",
-              },
-            ].map((s) => (
-              <div key={s.titulo} className="p-10 flex flex-col gap-6" style={{ background: "#0d1117" }}>
-                <div style={{ color: "var(--gold)" }}>{s.icon}</div>
-                <div>
-                  <h3 className="font-display text-xl font-light mb-3" style={{ fontFamily: "var(--font-playfair)" }}>
-                    {s.titulo}
-                  </h3>
-                  <p className="text-sm font-light leading-relaxed" style={{ color: "rgba(255,255,255,0.4)" }}>
-                    {s.desc}
-                  </p>
+              { icon: Home, title: "Compra y venta", desc: "Acompañamiento integral en cada paso de la operación, desde la búsqueda hasta la escrituración.", items: ["Asesoramiento personalizado", "Gestión de documentación", "Coordinación de escritura", "Respaldo jurídico incluido"] },
+              { icon: Building2, title: "Alquileres", desc: "Gestión completa de contratos con selección de inquilinos y respaldo legal en cada operación.", items: ["Búsqueda de inquilinos", "Contratos de alquiler", "Gestión de pagos", "Asesoramiento legal"] },
+              { icon: Shield, title: "Tasaciones", desc: "Valuación precisa y actualizada basada en datos reales del mercado inmobiliario rosarino.", items: ["Tasación sin cargo", "Análisis de mercado", "Informe detallado", "Estrategia de precio"] },
+            ].map(({ icon: Icon, title, desc, items }) => (
+              <div key={title} className="group bg-[#0a1628] border border-white/10 hover:border-[#c9a227]/40 rounded-2xl p-6 transition-all hover:-translate-y-1">
+                <div className="w-11 h-11 rounded-xl bg-[#c9a227]/10 flex items-center justify-center mb-4 group-hover:bg-[#c9a227]/20 transition-colors">
+                  <Icon className="w-5 h-5 text-[#c9a227]" />
                 </div>
-                <div className="gold-line mt-auto" />
+                <h3 className="font-bold text-white mb-2">{title}</h3>
+                <p className="text-white/50 text-xs leading-relaxed mb-4">{desc}</p>
+                <ul className="space-y-1.5">
+                  {items.map((item) => (
+                    <li key={item} className="flex items-center gap-2 text-xs text-white/60">
+                      <CheckCircle className="w-3 h-3 text-[#c9a227] flex-shrink-0" />{item}
+                    </li>
+                  ))}
+                </ul>
               </div>
             ))}
           </div>
@@ -363,37 +339,22 @@ export default function InmobiliariaPage() {
       </section>
 
       {/* ── TESTIMONIOS ── */}
-      <section id="testimonios" className="py-32 px-6 md:px-10" style={{ background: "#080b10" }}>
-        <div className="max-w-7xl mx-auto">
-          <p className="text-xs tracking-[0.35em] uppercase mb-5 font-medium text-center" style={{ color: "var(--gold)" }}>
-            Testimonios
-          </p>
-          <h2
-            className="font-display text-4xl font-light text-center mb-20"
-            style={{ fontFamily: "var(--font-playfair)" }}
-          >
-            Clientes que confiaron en nosotros
-          </h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-px" style={{ background: "rgba(255,255,255,0.06)" }}>
-            {testimonios.map((t) => (
-              <div key={t.nombre} className="p-10 flex flex-col justify-between gap-8" style={{ background: "#080b10" }}>
-                <div>
-                  <div className="flex gap-1 mb-6">
-                    {[...Array(5)].map((_, i) => (
-                      <svg key={i} width="12" height="12" viewBox="0 0 24 24" fill="var(--gold)">
-                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                      </svg>
-                    ))}
-                  </div>
-                  <p className="text-sm font-light leading-relaxed" style={{ color: "rgba(255,255,255,0.55)" }}>
-                    &ldquo;{t.texto}&rdquo;
-                  </p>
+      <section id="testimonios" className="py-20 bg-[#0a1628]">
+        <div className="max-w-6xl mx-auto px-5">
+          <p className="text-[#c9a227] text-xs font-semibold uppercase tracking-widest text-center mb-2">Testimonios</p>
+          <h2 className="text-3xl font-bold text-white text-center mb-12">Clientes que confiaron en nosotros</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {testimonials.map(({ name, text, rating, case: c }) => (
+              <div key={name} className="bg-[#0d1e35] border border-white/10 rounded-2xl p-6">
+                <div className="flex items-center gap-1 mb-4">
+                  {Array.from({ length: rating }).map((_, i) => (
+                    <Star key={i} className="w-3.5 h-3.5 fill-[#c9a227] text-[#c9a227]" />
+                  ))}
                 </div>
-                <div>
-                  <div className="gold-line mb-4" />
-                  <p className="text-sm font-medium">{t.nombre}</p>
-                  <p className="text-xs font-light" style={{ color: "rgba(255,255,255,0.35)" }}>{t.cargo}</p>
+                <p className="text-white/70 text-sm leading-relaxed mb-5">&ldquo;{text}&rdquo;</p>
+                <div className="border-t border-white/10 pt-4">
+                  <p className="font-semibold text-white text-sm">{name}</p>
+                  <p className="text-[#c9a227] text-xs mt-0.5">{c}</p>
                 </div>
               </div>
             ))}
@@ -401,69 +362,93 @@ export default function InmobiliariaPage() {
         </div>
       </section>
 
-      {/* ── CTA VISITA ── */}
-      <section
-        id="contacto"
-        className="relative py-40 px-6 md:px-10 overflow-hidden"
-        style={{ background: "#0d1117" }}
-      >
-        <div
-          className="absolute inset-0 opacity-20"
-          style={{
-            background: "radial-gradient(ellipse 60% 60% at 50% 50%, rgba(201,168,76,0.12), transparent)",
-          }}
-        />
-        <div className="relative z-10 max-w-3xl mx-auto text-center">
-          <p className="text-xs tracking-[0.4em] uppercase mb-6 font-medium" style={{ color: "var(--gold)" }}>
-            Coordinar visita
-          </p>
-          <h2
-            className="font-display text-4xl md:text-6xl font-light leading-[1.1] mb-8"
-            style={{ fontFamily: "var(--font-playfair)" }}
-          >
-            ¿Encontraste
-            <br />
-            <em>la propiedad ideal?</em>
-          </h2>
-          <p className="text-sm font-light mb-12" style={{ color: "rgba(255,255,255,0.4)" }}>
-            Coordinamos una visita sin compromiso. Catamarca 3041, Rosario.
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a
-              href="https://wa.me/5493417980000"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-gold"
-            >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
-              </svg>
-              <span>Coordinar por WhatsApp</span>
+      {/* ── CTA TASACIÓN ── */}
+      <section className="py-20 bg-[#c9a227]">
+        <div className="max-w-2xl mx-auto px-5 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-[#0a1628] mb-4">¿Querés tasar tu propiedad?</h2>
+          <p className="text-[#0a1628]/70 mb-8 text-lg">Tasación sin cargo. Te contactamos en menos de 24 horas.</p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <a href={WA} target="_blank" rel="noopener noreferrer"
+              className="flex items-center justify-center gap-2 bg-[#0a1628] hover:bg-[#0d1e35] text-white font-bold px-8 py-4 rounded-xl transition-colors text-sm">
+              <MessageCircle className="w-4 h-4" /> WhatsApp
             </a>
-            <a
-              href="mailto:inmobiliaria@perezhernandez.com.ar"
-              className="btn-gold"
-              style={{ borderColor: "rgba(255,255,255,0.15)", color: "rgba(255,255,255,0.5)" }}
-            >
-              <span>Enviar email</span>
+            <a href={TEL} className="flex items-center justify-center gap-2 border-2 border-[#0a1628]/30 hover:border-[#0a1628] text-[#0a1628] font-bold px-8 py-4 rounded-xl transition-colors text-sm">
+              <Phone className="w-4 h-4" /> Llamar ahora
             </a>
           </div>
         </div>
       </section>
 
+      {/* ── CONTACTO ── */}
+      <section id="contacto" className="py-20 bg-[#0d1e35]">
+        <div className="max-w-6xl mx-auto px-5">
+          <p className="text-[#c9a227] text-xs font-semibold uppercase tracking-widest text-center mb-2">Contacto</p>
+          <h2 className="text-3xl font-bold text-white text-center mb-12">Encontranos</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
+            <div className="space-y-6">
+              {[
+                { icon: MapPin, label: "Dirección", value: "Catamarca 3041, Rosario" },
+                { icon: Phone, label: "Teléfono", value: "(341) 240-6596" },
+                { icon: Mail, label: "Email", value: "inmobiliaria@perezhernandez.com.ar" },
+                { icon: Clock, label: "Horarios", value: "Lunes a Viernes — 9:00 a 18:00 hs" },
+              ].map(({ icon: Icon, label, value }) => (
+                <div key={label} className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-xl bg-[#c9a227]/10 flex items-center justify-center flex-shrink-0">
+                    <Icon className="w-5 h-5 text-[#c9a227]" />
+                  </div>
+                  <div>
+                    <p className="text-white/40 text-xs mb-0.5">{label}</p>
+                    <p className="text-white text-sm font-medium">{value}</p>
+                  </div>
+                </div>
+              ))}
+              <div className="flex gap-3 mt-6">
+                <a href={WA} target="_blank" rel="noopener noreferrer"
+                  className="flex items-center gap-2 bg-[#c9a227] hover:bg-[#b8911f] text-[#0a1628] font-bold px-5 py-3 rounded-xl text-sm transition-colors">
+                  <MessageCircle className="w-4 h-4" /> WhatsApp
+                </a>
+              </div>
+            </div>
+
+            <div className="bg-[#0a1628] border border-white/10 rounded-2xl p-6 space-y-4">
+              <h3 className="font-bold text-white mb-1">Coordiná una visita</h3>
+              <p className="text-white/40 text-xs mb-4">Te respondemos en menos de 24 horas</p>
+              {[
+                { placeholder: "Tu nombre completo", type: "text" },
+                { placeholder: "Tu email", type: "email" },
+                { placeholder: "Tu teléfono", type: "tel" },
+              ].map(({ placeholder, type }) => (
+                <input key={placeholder} type={type} placeholder={placeholder}
+                  className="w-full bg-white/5 border border-white/10 focus:border-[#c9a227]/50 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/30 outline-none transition-colors" />
+              ))}
+              <textarea placeholder="¿Qué propiedad te interesa o qué estás buscando?" rows={3}
+                className="w-full bg-white/5 border border-white/10 focus:border-[#c9a227]/50 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/30 outline-none transition-colors resize-none" />
+              <button className="w-full bg-[#c9a227] hover:bg-[#b8911f] text-[#0a1628] font-bold py-3.5 rounded-xl text-sm transition-colors flex items-center justify-center gap-2">
+                <ArrowRight className="w-4 h-4" /> Enviar consulta
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ── FOOTER ── */}
-      <footer
-        className="py-8 px-6 md:px-10 flex flex-col md:flex-row items-center justify-between gap-4"
-        style={{ borderTop: "1px solid rgba(255,255,255,0.06)", background: "#080b10" }}
-      >
-        <span className="text-xs" style={{ color: "rgba(255,255,255,0.2)" }}>
-          © {new Date().getFullYear()} Pérez Hernández Negocios Inmobiliarios · Catamarca 3041, Rosario
-        </span>
-        <Link href="/" className="text-xs tracking-[0.2em] uppercase" style={{ color: "rgba(255,255,255,0.2)" }}>
-          Volver al inicio
-        </Link>
+      <footer className="bg-[#060f1e] py-8 border-t border-white/10">
+        <div className="max-w-6xl mx-auto px-5 flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-2">
+            <div className="w-6 h-6 rounded bg-[#c9a227] flex items-center justify-center">
+              <Building2 className="w-3 h-3 text-[#0a1628]" />
+            </div>
+            <span className="text-white/60 text-sm">Pérez Hernández Inmobiliaria © {new Date().getFullYear()}</span>
+          </div>
+          <p className="text-white/30 text-xs">Catamarca 3041, Rosario · (341) 240-6596</p>
+          <Link href="/" className="text-white/20 hover:text-white/50 text-xs transition-colors">← Volver al inicio</Link>
+        </div>
       </footer>
+
+      <a href={WA} target="_blank" rel="noopener noreferrer"
+        className="fixed bottom-5 right-5 z-50 flex items-center gap-2 bg-[#25d366] hover:bg-[#1ebe5d] text-white text-sm font-semibold px-5 py-3 rounded-full shadow-xl transition-colors md:hidden">
+        <MessageCircle className="w-4 h-4" /> WhatsApp
+      </a>
     </div>
   );
 }
