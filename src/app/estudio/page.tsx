@@ -64,65 +64,43 @@ export default function EstudioPage() {
 
       {/* ── 1. HERO ─────────────────────────────────────────────────────────── */}
       <section className="relative min-h-screen flex items-center overflow-hidden pt-16">
-        {/* Background sólido */}
-        <div className="absolute inset-0 bg-[#0a1628]" />
+        {/* Background */}
+        <div className="absolute inset-0">
+          <img
+            src="https://images.unsplash.com/photo-1521791136064-7986c2920216?q=80&w=2070&auto=format&fit=crop"
+            alt=""
+            className="w-full h-full object-cover opacity-[0.07]"
+          />
+          <div className="absolute inset-0 bg-[#0a1628]/90" />
+        </div>
 
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#c9a227]/30 to-transparent" />
         <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#c9a227]/30 to-transparent" />
 
-        <div className="relative z-10 w-full max-w-6xl mx-auto px-5 py-20">
-          <div className="flex flex-col lg:flex-row items-center gap-16 lg:gap-20">
+        <div className="relative z-10 w-full max-w-4xl mx-auto px-5 py-20 text-center">
+          <p className="text-[#c9a227] text-xs font-semibold uppercase tracking-[0.4em] mb-8">
+            Estudio Jurídico · Rosario
+          </p>
 
-            {/* ── FOTO SOCIO ── */}
-            <div className="flex-shrink-0 flex flex-col items-center gap-4 w-full lg:w-auto">
-              <div
-                className="relative overflow-hidden rounded-2xl w-[200px] h-[270px] lg:w-[260px] lg:h-[350px]"
-                style={{ boxShadow: "0 24px 70px rgba(0,0,0,0.55), 0 0 0 1px rgba(201,168,39,0.25)" }}
-              >
-                <img
-                  src="https://images.unsplash.com/photo-1552058544-f2b08422138a?q=80&w=600&auto=format&fit=crop"
-                  alt="S. Pérez Hernández"
-                  className="w-full h-full object-cover object-top"
-                  style={{ filter: "blur(6px)", transform: "scale(1.05)" }}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628]/75 via-transparent to-transparent" />
-                <div className="absolute top-0 left-0 right-0 h-0.5 bg-[#c9a227]" />
-                {/* Nombre sobre la foto */}
-                <div className="absolute bottom-0 left-0 right-0 p-4">
-                  <p className="text-white font-bold text-base leading-none">S. Pérez Hernández</p>
-                  <p className="text-[#c9a227] text-[10px] tracking-widest uppercase mt-1.5">Abogado · Fundador</p>
-                </div>
-              </div>
-            </div>
+          <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold text-white leading-[1.05] mb-6">
+            Derecho laboral<br />
+            e inmobiliario<br />
+            <span className="text-[#c9a227]">con respaldo real.</span>
+          </h1>
 
-            {/* ── TEXTO PRINCIPAL ── */}
-            <div className="flex-1 text-center lg:text-left">
-              <p className="text-[#c9a227] text-xs font-semibold uppercase tracking-[0.4em] mb-6">
-                Estudio Jurídico · Rosario
-              </p>
+          <p className="text-white/55 text-lg max-w-xl mx-auto mb-10 leading-relaxed">
+            Somos un estudio jurídico de confianza especializado en derecho laboral e inmobiliario. Primera consulta sin cargo.
+          </p>
 
-              <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white leading-[1.08] mb-6">
-                Derecho laboral<br />
-                e inmobiliario<br />
-                <span className="text-[#c9a227]">con respaldo real.</span>
-              </h1>
-
-              <p className="text-white/55 text-base md:text-lg max-w-lg mx-auto lg:mx-0 mb-10 leading-relaxed">
-                Somos un estudio jurídico de confianza especializado en derecho laboral e inmobiliario. Primera consulta sin cargo.
-              </p>
-
-              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3">
-                <a href={WA} target="_blank" rel="noopener noreferrer"
-                  className="w-full sm:w-auto flex items-center justify-center gap-2.5 bg-[#c9a227] hover:bg-[#b8911f] text-[#0a1628] font-bold px-8 py-4 rounded-xl transition-colors text-sm shadow-lg shadow-[#c9a227]/20">
-                  <MessageCircle className="w-4 h-4" /> Consulta sin cargo
-                </a>
-                <a href="#servicios"
-                  className="w-full sm:w-auto flex items-center justify-center gap-2 border border-white/20 hover:border-white/40 text-white/70 hover:text-white px-7 py-4 rounded-xl transition-colors text-sm">
-                  Ver servicios <ArrowRight className="w-4 h-4" />
-                </a>
-              </div>
-            </div>
-
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+            <a href={WA} target="_blank" rel="noopener noreferrer"
+              className="w-full sm:w-auto flex items-center justify-center gap-2.5 bg-[#c9a227] hover:bg-[#b8911f] text-[#0a1628] font-bold px-8 py-4 rounded-xl transition-colors text-sm shadow-lg shadow-[#c9a227]/20">
+              <MessageCircle className="w-4 h-4" /> Consulta sin cargo
+            </a>
+            <a href="#servicios"
+              className="w-full sm:w-auto flex items-center justify-center gap-2 border border-white/20 hover:border-white/40 text-white/70 hover:text-white px-7 py-4 rounded-xl transition-colors text-sm">
+              Ver servicios <ArrowRight className="w-4 h-4" />
+            </a>
           </div>
         </div>
 
