@@ -1,13 +1,40 @@
 import type { Metadata } from "next";
 import "./globals.css";
 
+const BASE_URL = "https://perezhernandez.vercel.app";
+
 export const metadata: Metadata = {
-  title: "Pérez Hernández | Inmobiliaria & Estudio Jurídico",
+  metadataBase: new URL(BASE_URL),
+  title: "Pérez & Hernández | Estudio Jurídico & Inmobiliaria",
   description:
-    "Pérez Hernández — Negocios inmobiliarios y asesoramiento jurídico en Rosario, Argentina.",
+    "Soluciones legales e inmobiliarias con respaldo real. Derecho laboral, derecho inmobiliario y negocios inmobiliarios en Rosario, Argentina.",
   icons: {
     icon: "/favicon.png",
     apple: "/favicon.png",
+  },
+  openGraph: {
+    type: "website",
+    url: BASE_URL,
+    siteName: "Pérez & Hernández",
+    title: "Pérez & Hernández | Estudio Jurídico & Inmobiliaria",
+    description:
+      "Soluciones legales e inmobiliarias con respaldo real. Derecho laboral, derecho inmobiliario y negocios inmobiliarios en Rosario, Argentina.",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Pérez & Hernández — Estudio Jurídico & Inmobiliaria",
+      },
+    ],
+    locale: "es_AR",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Pérez & Hernández | Estudio Jurídico & Inmobiliaria",
+    description:
+      "Soluciones legales e inmobiliarias con respaldo real. Rosario, Argentina.",
+    images: ["/og-image.png"],
   },
 };
 
