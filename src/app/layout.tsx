@@ -21,7 +21,7 @@ export const metadata: Metadata = {
       "Soluciones legales e inmobiliarias con respaldo real. Derecho laboral, derecho inmobiliario y negocios inmobiliarios en Rosario, Argentina.",
     images: [
       {
-        url: "/og-image.png",
+        url: `${BASE_URL}/og-image.png`,
         width: 1200,
         height: 630,
         alt: "Pérez & Hernández — Estudio Jurídico & Inmobiliaria",
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     title: "Pérez & Hernández | Estudio Jurídico & Inmobiliaria",
     description:
       "Soluciones legales e inmobiliarias con respaldo real. Rosario, Argentina.",
-    images: ["/og-image.png"],
+    images: [`${BASE_URL}/og-image.png`],
   },
 };
 
