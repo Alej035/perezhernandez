@@ -80,7 +80,7 @@ export default function EstudioPage() {
                 style={{ boxShadow: "0 24px 70px rgba(0,0,0,0.55), 0 0 0 1px rgba(201,168,39,0.25)" }}
               >
                 <img
-                  src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?q=80&w=600&auto=format&fit=crop"
+                  src="https://images.unsplash.com/photo-1552058544-f2b08422138a?q=80&w=600&auto=format&fit=crop"
                   alt="S. Pérez Hernández"
                   className="w-full h-full object-cover object-top"
                   style={{ filter: "blur(6px)", transform: "scale(1.05)" }}
