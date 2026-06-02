@@ -102,6 +102,7 @@ export default function EstudioPage() {
                   src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=600&auto=format&fit=crop"
                   alt="S. Pérez Hernández"
                   className="w-full h-full object-cover object-top"
+                  style={{ filter: "blur(6px)", transform: "scale(1.05)" }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628]/75 via-transparent to-transparent" />
                 <div className="absolute top-0 left-0 right-0 h-0.5 bg-[#c9a227]" />
