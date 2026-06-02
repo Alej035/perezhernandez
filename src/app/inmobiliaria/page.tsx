@@ -212,7 +212,7 @@ export default function InmobiliariaPage() {
   const [filter, setFilter] = useState("Todos");
 
   return (
-    <div className="page-enter bg-[#0a1628] font-sans">
+    <div className="slide-from-left bg-[#0a1628] font-sans">
       <Navbar />
 
       {/* ── HERO ── */}

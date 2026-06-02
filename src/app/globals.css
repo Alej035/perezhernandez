@@ -1,20 +1,35 @@
 @import "tailwindcss";
 
-body {
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
-  -webkit-font-smoothing: antialiased;
+html {
+  overflow-x: hidden;
 }
 
 html, body, #__next {
   height: 100%;
 }
 
-/* Fade-in al entrar a cada página */
-@keyframes pageFadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
+body {
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
-.page-enter {
-  animation: pageFadeIn 0.45s cubic-bezier(0.4, 0, 0.2, 1) both;
+/* ── Slide desde la derecha (Estudio Jurídico) ── */
+@keyframes slideFromRight {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
+}
+
+/* ── Slide desde la izquierda (Inmobiliaria) ── */
+@keyframes slideFromLeft {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(0); }
+}
+
+.slide-from-right {
+  animation: slideFromRight 0.55s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+.slide-from-left {
+  animation: slideFromLeft 0.55s cubic-bezier(0.4, 0, 0.2, 1) both;
 }
