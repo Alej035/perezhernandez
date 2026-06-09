@@ -47,7 +47,7 @@ export default function Home() {
             onMouseEnter={() => setHovered(p.id)}
             onMouseLeave={() => setHovered(null)}
           >
-            {/* Background */}
+            {/* Background image */}
             <img
               src={p.img}
               alt={p.label}
@@ -58,53 +58,91 @@ export default function Home() {
               }}
             />
 
-            {/* Overlay */}
+            {/* Architectural grid overlay */}
+            <div className="absolute inset-0 geo-pattern opacity-70" />
+
+            {/* Main gradient overlay */}
             <div
               className="absolute inset-0"
               style={{
                 background: isHovered
-                  ? "linear-gradient(to top, rgba(10,22,40,0.92) 0%, rgba(10,22,40,0.45) 55%, rgba(10,22,40,0.15) 100%)"
-                  : "linear-gradient(to top, rgba(10,22,40,0.85) 0%, rgba(10,22,40,0.4) 55%, rgba(10,22,40,0.1) 100%)",
+                  ? "linear-gradient(to top, rgba(10,22,40,0.97) 0%, rgba(10,22,40,0.55) 50%, rgba(10,22,40,0.2) 100%)"
+                  : "linear-gradient(to top, rgba(10,22,40,0.90) 0%, rgba(10,22,40,0.45) 55%, rgba(10,22,40,0.15) 100%)",
                 transition: "background 0.5s ease",
               }}
             />
 
-            {/* Divisor vertical (solo desktop) */}
+            {/* Radial gold glow when hovered */}
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                background: "radial-gradient(ellipse at 30% 80%, rgba(201,168,39,0.10) 0%, transparent 60%)",
+                opacity: isHovered ? 1 : 0,
+                transition: "opacity 0.5s ease",
+              }}
+            />
+
+            {/* Gold top accent bar */}
+            <div
+              className="absolute top-0 left-0 right-0 h-0.5"
+              style={{
+                background: "linear-gradient(90deg, transparent, rgba(201,168,39,0.6), transparent)",
+                opacity: isHovered ? 1 : 0,
+                transition: "opacity 0.35s ease",
+              }}
+            />
+
+            {/* Corner brackets — architectural identity */}
+            <div className="absolute top-6 left-6 opacity-25 hidden sm:block" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M24 0 H0 V24" stroke="#c9a227" strokeWidth="1.5" />
+              </svg>
+            </div>
+            <div className="absolute top-6 right-6 opacity-25 hidden sm:block" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M0 0 H24 V24" stroke="#c9a227" strokeWidth="1.5" />
+              </svg>
+            </div>
+
+            {/* Vertical desktop divider */}
             {i === 0 && (
               <div
                 className="absolute top-0 right-0 bottom-0 w-px hidden sm:block"
-                style={{ background: "rgba(201,168,39,0.25)" }}
+                style={{
+                  background: "linear-gradient(to bottom, transparent 0%, rgba(201,168,39,0.35) 30%, rgba(201,168,39,0.35) 70%, transparent 100%)",
+                }}
               />
             )}
 
             {/* Content */}
             <div className="relative z-10 p-8 sm:p-12 md:p-16 pb-10 sm:pb-14">
               <p
-                className="text-xs font-semibold uppercase tracking-[0.25em] mb-4"
+                className="text-xs font-semibold uppercase tracking-[0.3em] mb-4 animate-entry-0"
                 style={{ color: "#c9a227" }}
               >
                 {p.label}
               </p>
 
               <h2
-                className="text-2xl sm:text-3xl md:text-4xl font-bold text-white leading-snug mb-3"
+                className="font-display text-2xl sm:text-3xl md:text-4xl font-bold text-white leading-snug mb-3 animate-entry-1"
                 style={{ maxWidth: 420 }}
               >
                 {p.title}
               </h2>
 
               <p
-                className="text-sm sm:text-base text-white/60 mb-7 font-light"
+                className="text-sm sm:text-base text-white/60 mb-7 font-light animate-entry-2"
                 style={{ maxWidth: 360 }}
               >
                 {p.sub}
               </p>
 
               <span
-                className="inline-flex items-center gap-2 bg-[#c9a227] text-[#0a1628] text-sm font-bold px-6 py-3 rounded-xl"
+                className="inline-flex items-center gap-2 bg-[#c9a227] text-[#0a1628] text-sm font-bold px-6 py-3 rounded-xl animate-entry-3"
                 style={{
-                  transition: "gap 0.25s ease, padding-right 0.25s ease",
-                  ...(isHovered ? { gap: "10px" } : {}),
+                  boxShadow: "0 4px 20px rgba(201,168,39,0.25)",
+                  transition: "gap 0.25s ease, box-shadow 0.25s ease",
+                  ...(isHovered ? { gap: "10px", boxShadow: "0 6px 28px rgba(201,168,39,0.35)" } : {}),
                 }}
               >
                 {p.cta}
@@ -121,19 +159,28 @@ export default function Home() {
         );
       })}
 
-      {/* Logo + nombre centrado arriba */}
-      <div className="absolute top-5 left-1/2 -translate-x-1/2 z-30 pointer-events-none flex items-center gap-3">
-        <img src="/logo.png" alt="logo" className="w-10 h-10 rounded-xl object-cover shadow-lg flex-shrink-0" />
+      {/* Logo — glassmorphism bar */}
+      <div
+        className="absolute top-5 left-1/2 -translate-x-1/2 z-30 pointer-events-none flex items-center gap-3 px-4 py-2.5 rounded-2xl animate-entry-0"
+        style={{
+          background: "rgba(10,22,40,0.55)",
+          backdropFilter: "blur(12px)",
+          WebkitBackdropFilter: "blur(12px)",
+          border: "1px solid rgba(201,168,39,0.18)",
+          boxShadow: "0 8px 32px rgba(0,0,0,0.3)",
+        }}
+      >
+        <img src="/logo.png" alt="logo" className="w-9 h-9 rounded-xl object-cover shadow-lg flex-shrink-0" />
         <div>
           <p className="text-white font-bold text-sm leading-none tracking-wide">Pérez Hernández</p>
           <p className="text-[#c9a227] text-[10px] tracking-[0.25em] uppercase mt-0.5">Inmobiliaria & Estudio Jurídico</p>
         </div>
       </div>
 
-      {/* Mobile: divisor horizontal */}
+      {/* Mobile: horizontal divider */}
       <div
         className="sm:hidden w-full flex-shrink-0"
-        style={{ height: 1, background: "rgba(201,168,39,0.3)", order: 1 }}
+        style={{ height: 1, background: "linear-gradient(90deg, transparent, rgba(201,168,39,0.35), transparent)", order: 1 }}
       />
 
       <style>{`

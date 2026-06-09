@@ -1,5 +1,14 @@
 import type { Metadata } from "next";
+import { Playfair_Display } from "next/font/google";
 import "./globals.css";
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  weight: ["600", "700"],
+  style: ["normal", "italic"],
+  variable: "--font-display",
+  display: "swap",
+});
 
 const BASE_URL = "https://perezhernandez.vercel.app";
 
@@ -40,7 +49,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es" className="h-full">
+    <html lang="es" className={`h-full ${playfair.variable}`}>
       <body className="h-full bg-[#0a1628]">{children}</body>
     </html>
   );

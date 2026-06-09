@@ -11,16 +11,54 @@ html, body, #__next {
 body {
   font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
 }
 
-/* ── Slide desde la derecha (Estudio Jurídico) ── */
+/* ── Display / serif font for premium headings ── */
+.font-display {
+  font-family: var(--font-display), "Georgia", "Times New Roman", serif;
+  letter-spacing: -0.02em;
+}
+
+/* ── Architectural grid pattern ── */
+.geo-pattern {
+  background-image:
+    linear-gradient(rgba(201, 168, 39, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201, 168, 39, 0.04) 1px, transparent 1px);
+  background-size: 72px 72px;
+}
+
+/* ── Scroll reveal ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.85s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.85s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Page-entry hero animations (staggered) ── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-entry-0 { animation: fadeInUp 0.8s 0.05s cubic-bezier(0.4, 0, 0.2, 1) both; }
+.animate-entry-1 { animation: fadeInUp 0.8s 0.2s  cubic-bezier(0.4, 0, 0.2, 1) both; }
+.animate-entry-2 { animation: fadeInUp 0.8s 0.35s cubic-bezier(0.4, 0, 0.2, 1) both; }
+.animate-entry-3 { animation: fadeInUp 0.8s 0.5s  cubic-bezier(0.4, 0, 0.2, 1) both; }
+.animate-entry-4 { animation: fadeInUp 0.8s 0.65s cubic-bezier(0.4, 0, 0.2, 1) both; }
+
+/* ── Slide animations for page transitions ── */
 @keyframes slideFromRight {
   from { transform: translateX(100%); }
   to   { transform: translateX(0); }
 }
 
-/* ── Slide desde la izquierda (Inmobiliaria) ── */
 @keyframes slideFromLeft {
   from { transform: translateX(-100%); }
   to   { transform: translateX(0); }
